@@ -75,7 +75,7 @@ const Document = withEmotionCache(
 export default function App() {
     return (
         <Document>
-            <SaasProvider theme={theme}>
+            <SaasProvider>
                 <Outlet/>
             </SaasProvider>
         </Document>
