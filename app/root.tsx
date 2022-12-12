@@ -1,27 +1,26 @@
-// root.tsx
-import React, {useContext, useEffect} from 'react'
-import {withEmotionCache} from '@emotion/react'
-import {SaasProvider} from '@saas-ui/react'
-import {
-    Links,
-    LiveReload,
-    Meta,
-    Outlet,
-    Scripts,
-    ScrollRestoration,
-} from '@remix-run/react'
-import {MetaFunction, LinksFunction} from '@remix-run/node' // Depends on the runtime you choose
+import { withEmotionCache } from "@emotion/react";
+import { json, MetaFunction } from "@remix-run/node"; // Depends on the runtime you choose
+import { Link, Links, LiveReload, Meta, NavLink, Outlet, Scripts, ScrollRestoration } from "@remix-run/react";
 
-import {ServerStyleContext, ClientStyleContext} from './context'
+import { SaasProvider } from "@saas-ui/react";
+import { theme } from "app/core/lib/theme/theme";
+import React, { useContext, useEffect } from "react";
+import { IntlProvider } from "react-intl";
+import { useMatch } from "react-router";
 
-import {theme} from "app/theme/theme";
+import { ClientStyleContext, ServerStyleContext } from "./context";
 
+// const host = process.env.NODE_ENV === "production" ? "your-domain.com" : "localhost:3000";
 
+/**
+ * Meta
+ */
 export const meta: MetaFunction = () => ({
-    charset: 'utf-8',
-    title: 'New Remix App',
-    viewport: 'width=device-width,initial-scale=1',
+    charset: "utf-8",
+    title: "Core",
+    viewport: "width=device-width,initial-scale=1"
 });
+
 
 
 interface DocumentProps {
@@ -29,7 +28,7 @@ interface DocumentProps {
 }
 
 const Document = withEmotionCache(
-    ({children}: DocumentProps, emotionCache) => {
+    ({ children }: DocumentProps, emotionCache) => {
         const serverStyleData = useContext(ServerStyleContext);
         const clientStyleData = useContext(ClientStyleContext);
 
@@ -48,23 +47,23 @@ const Document = withEmotionCache(
         }, []);
 
         return (
-            <html lang="en">
+            <html>
             <head>
-                <Meta/>
-                <Links/>
-                {serverStyleData?.map(({key, ids, css}) => (
+                <Meta />
+                <Links />
+                {serverStyleData?.map(({ key, ids, css }) => (
                     <style
                         key={key}
-                        data-emotion={`${key} ${ids.join(' ')}`}
-                        dangerouslySetInnerHTML={{__html: css}}
+                        data-emotion={`${key} ${ids.join(" ")}`}
+                        dangerouslySetInnerHTML={{ __html: css }}
                     />
                 ))}
             </head>
             <body>
             {children}
-            <ScrollRestoration/>
-            <Scripts/>
-            <LiveReload/>
+            <ScrollRestoration />
+            <Scripts />
+            <LiveReload />
             </body>
             </html>
         );
@@ -72,12 +71,24 @@ const Document = withEmotionCache(
 );
 
 
+const LinkComponent = (props: any) => {
+    console.log("LinkComponent", props);
+    const { href, isActive, ...rest } = props;
+    const isMatch = useMatch(href);
+    console.log(isMatch);
+    return <Link to={href} {...rest} isActive={isMatch || isActive} />;
+};
+
 export default function App() {
     return (
-        <Document>
-            <SaasProvider>
-                <Outlet/>
-            </SaasProvider>
-        </Document>
-    )
+        <IntlProvider locale="en" defaultLocale="en">
+            <Document>
+                {/*<IsomorphicNavProvider host={host} defaultPrefetch="intent" useTrailingSlash openOutgoingAsBlank>*/}
+                <SaasProvider theme={theme} linkComponent={LinkComponent}>
+                    <Outlet />
+                </SaasProvider>
+                {/*</IsomorphicNavProvider>*/}
+            </Document>
+        </IntlProvider>
+    );
 }
