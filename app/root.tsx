@@ -1,12 +1,9 @@
 import { withEmotionCache } from "@emotion/react";
-import { json, MetaFunction } from "@remix-run/node"; // Depends on the runtime you choose
-import { Link, Links, LiveReload, Meta, NavLink, Outlet, Scripts, ScrollRestoration } from "@remix-run/react";
+import { MetaFunction } from "@remix-run/node"; // Depends on the runtime you choose
+import { Links, LiveReload, Meta, NavLink, Outlet, Scripts, ScrollRestoration } from "@remix-run/react";
 
 import { SaasProvider } from "@saas-ui/react";
-import { theme } from "app/core/lib/theme/theme";
 import React, { useContext, useEffect } from "react";
-import { IntlProvider } from "react-intl";
-import { useMatch } from "react-router";
 
 import { ClientStyleContext, ServerStyleContext } from "./context";
 
@@ -70,25 +67,12 @@ const Document = withEmotionCache(
     }
 );
 
-
-const LinkComponent = (props: any) => {
-    console.log("LinkComponent", props);
-    const { href, isActive, ...rest } = props;
-    const isMatch = useMatch(href);
-    console.log(isMatch);
-    return <Link to={href} {...rest} isActive={isMatch || isActive} />;
-};
-
 export default function App() {
     return (
-        <IntlProvider locale="en" defaultLocale="en">
             <Document>
-                {/*<IsomorphicNavProvider host={host} defaultPrefetch="intent" useTrailingSlash openOutgoingAsBlank>*/}
-                <SaasProvider theme={theme} linkComponent={LinkComponent}>
+                <SaasProvider>
                     <Outlet />
                 </SaasProvider>
-                {/*</IsomorphicNavProvider>*/}
             </Document>
-        </IntlProvider>
     );
 }

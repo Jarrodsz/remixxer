@@ -1,20 +1,33 @@
-import {Link, NavLink} from "@remix-run/react";
-import {Box} from "@chakra-ui/react";
-import {NavItem} from "@saas-ui/sidebar";
+import React from 'react';
 
+import type {DataFunctionArgs} from '@remix-run/node';
+import {json} from '@remix-run/node';
+import {Link} from "@remix-run/react";
+import {Box} from "@chakra-ui/react";
+
+/**
+ * LOADER
+ */
+export async function loader({request}: DataFunctionArgs) {
+    return json({
+        empty: true
+    });
+}
+
+/**
+ * VIEW
+ */
 export default function Index() {
     return (
         <>
-            Remix Playground
-
+            index.tsx placeholder
             <Box>
-                <Link to={"/admin"}>Link to admin</Link>
-
-                <NavLink to={"user/support"}>NavLink</NavLink>
-                <Link to={"user/support"}>Link</Link>
-                <NavItem label="xxx" size="lg" href={"user/support"} />
-
+				<Link to={"/user"}>/user</Link>
             </Box>
+
+			<Box>
+				<Link to={"/user/onboard"}>/user/onboard</Link>
+			</Box>
         </>
     );
 }
