@@ -1,18 +1,10 @@
-import type {
-	User,
-	UserPassword,
-	UserProfile,
-	UserSubscription
-} from '@prisma/client';
+import type {Admin, AdminPassword, AdminProfile} from '@prisma/client';
 
 import {createCookieSessionStorage} from '@remix-run/node';
 
-export interface UserSession extends User {
-	password?: UserPassword | null;
-	subscription?: UserSubscription | null;
-
-	// Extended
-	profile?: UserProfile | null;
+export interface AdminAuthSession extends Admin {
+	password?: AdminPassword | null;
+	AdminProfile?: AdminProfile | null;
 }
 
 export const sessionStorage = createCookieSessionStorage({
@@ -21,7 +13,7 @@ export const sessionStorage = createCookieSessionStorage({
 		sameSite: 'lax',
 		path: '/',
 		httpOnly: true,
-		secrets: [process.env.SESSION_USER_SECRET || 'SESSION_SECRET'],
+		secrets: [process.env.SESSION_ADMIN_SECRET || 'SESSION_ADMIN_SECRET'],
 		secure: process.env.NODE_ENV === 'production'
 	}
 });
